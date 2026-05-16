@@ -1,0 +1,41 @@
+# 第三方库（完整源码）
+mqtt_project/paho.mqtt.c/
+rpc_server_project/jsonrpc-c/
+rpc_server_project/libev/
+
+# 编译产物
+*.o
+*.a
+*.so
+*.exe
+*.out
+
+# 可执行文件
+mqtt_project/mqtt_device/mqtt_device
+rpc_server_project/rpc_server/rpc_server
+
+# Qt 编译产物
+*.moc
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+*.app
+*.pro.user
+*.pro.user.*
+.qmake.stash
+debug/
+release/
+
+# 临时文件
+*.log
+*.tmp
+*.bak
+*.orig
+*~
+
+# IDE
+.vscode/
+.idea/
+
+# 配置文件（含密码）
+*.cfg
