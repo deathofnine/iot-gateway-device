@@ -50,7 +50,7 @@ text
 git clone https://github.com/deathofnine/iot-gateway-device.git
 cd iot-gateway-device
 ```
-###2. 编译第三方库
+### 2. 编译第三方库
 2.1 MQTT 库（paho.mqtt.c）
 bash
 ```bash
@@ -108,7 +108,7 @@ make install
 ```
 编译后 tmp/ 目录下生成 include/、lib/。
 
-###3. 编译项目模块
+### 3. 编译项目模块
 ```bash
 # RPC 服务端
 cd rpc_server_project/rpc_server
@@ -122,7 +122,7 @@ make
 cd ../../LED_Humi
 qmake && make
 ```
-###4. 部署到开发板
+### 4. 部署到开发板
 将三个可执行文件推送到开发板 /root 目录：
 
 ```bash
