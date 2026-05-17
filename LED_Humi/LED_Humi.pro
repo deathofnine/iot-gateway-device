@@ -20,22 +20,21 @@ SOURCES += \
     dht11_thread.cpp \
     main.cpp \
     mainwindow.cpp \
+    qcustomplot.cpp \
     rpc_client.cpp
 
 HEADERS += \
-    Linux.h \
     cJSON.h \
-    dht11.h \
     dht11_thread.h \
-    led.h \
     mainwindow.h \
+    qcustomplot.h \
     rpc.h \
-    rpc_client.h \
-    rpc_server.h
+    rpc_client.h
 
 FORMS += \
     mainwindow.ui
 QT += core gui widgets testlib 
+QT += widgets printsupport
 INCLUDEPATH+=/home/book/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

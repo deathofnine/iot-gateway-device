@@ -2,7 +2,6 @@
 
 #include "dht11_thread.h"
 #include <QDebug>
-#include "dht11.h"
 #include "rpc_client.h"
     // 线程核心运行函数（自动调用）
 DHT11Thread::DHT11Thread(QObject *parent)

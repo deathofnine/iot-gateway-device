@@ -6,95 +6,216 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>738</width>
-    <height>547</height>
+    <width>1024</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>130</y>
-      <width>151</width>
-      <height>261</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QLabel" name="humi">
-       <property name="text">
-        <string>Text</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="temp">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QLabel" name="label_bg">
+   <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-10</y>
-      <width>741</width>
-      <height>471</height>
+      <y>0</y>
+      <width>200</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QListWidget {
+    background-color: #34495e;
+    border: none;
+}
+QListWidget::item {
+    height: 60px;          /* 条目高度，像大按钮 */
+    font-size: 15px;
+    color: #ffffff;
+    padding-left: 15px;
+    margin: 8px 10px;      /* 上下左右边距，实现条目分开 */
+    border-radius: 8px;
+    background-color: #4a5f7a;
+}
+/* 鼠标悬浮效果 */
+QListWidget::item:hover {
+    background-color: #577094;
+}
+/* 选中高亮效果 */
+QListWidget::item:selected {
+    background-color: #409eff;
+    color: #fff;
+}</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>LED 灯光控制</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>环境参数检测</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>0</y>
+      <width>824</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="led_control">
+     <widget class="QPushButton" name="LED_pushButton">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>220</y>
+        <width>211</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #409eff;
+color: white;
+border-radius: 8px;
+font-size: 14px;
+font-weight: bold;</string>
+      </property>
+      <property name="text">
+       <string>led_click</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="envir_show">
+     <widget class="QWidget" name="horizontalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>60</y>
+        <width>501</width>
+        <height>35</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="humi">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: #2c3e50;
+color: #ffffff;
+padding: 8px;
+border-radius: 6px;
+font-size: 14px;</string>
+         </property>
+         <property name="text">
+          <string>humi</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>30</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="temp">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: #2c3e50;
+color: #ffffff;
+padding: 8px;
+border-radius: 6px;
+font-size: 14px;</string>
+         </property>
+         <property name="text">
+          <string>temp</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QCustomPlot" name="plot" native="true">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>130</y>
+        <width>661</width>
+        <height>401</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_bg">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1024</width>
+      <height>600</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="LED_pushButton">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>200</y>
-      <width>211</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>led_click</string>
-    </property>
-   </widget>
-   <zorder>LED_pushButton</zorder>
    <zorder>label_bg</zorder>
-   <zorder>layoutWidget</zorder>
+   <zorder>listWidget</zorder>
+   <zorder>stackedWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>738</width>
+     <width>1024</width>
      <height>22</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
