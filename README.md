@@ -50,9 +50,10 @@ text
 git clone https://github.com/deathofnine/iot-gateway-device.git
 cd iot-gateway-device
 ```
-### 2. 编译第三方库
-2.1 MQTT 库（paho.mqtt.c）
-bash
+<details>
+<summary><b> 第三方库编译步骤（初次配置需执行）</b></summary>
+
+**1. 编译 paho.mqtt.c (MQTT库)**
 ```bash
 cd mqtt_project
 git clone https://github.com/eclipse/paho.mqtt.c.git
@@ -87,7 +88,7 @@ bash
 cd output/lib
 adb push libpaho-mqtt3* /lib
 ```
-2.2 编译 libev 库
+**2 编译 libev 库**
 ```bash
 cd ../../../../rpc_server_project/libev
 ./configure --host=arm-buildroot-linux-gnueabihf --prefix=$PWD/tmp
@@ -96,7 +97,7 @@ make install
 ```
 编译后 tmp/ 目录下生成 include/、lib/、share/。
 
-2.3 编译 jsonrpc-c 库
+**3 编译 jsonrpc-c 库**
 ```bash
 cd ../jsonrpc-c
 autoreconf -i
@@ -107,8 +108,9 @@ make -j 16
 make install
 ```
 编译后 tmp/ 目录下生成 include/、lib/。
+</details> 
 
-### 3. 编译项目模块
+### 2. 编译项目模块
 ```bash
 # RPC 服务端
 cd rpc_server_project/rpc_server
@@ -122,7 +124,7 @@ make
 cd ../../LED_Humi
 qmake && make
 ```
-### 4. 部署到开发板
+### 3. 部署到开发板
 将三个可执行文件推送到开发板 /root 目录：
 
 ```bash
@@ -146,8 +148,10 @@ insmod led_drv.ko
 
 ```bash
 ./rpc_server &
-./Led_Humi &
-./mqtt_device &
+#在一个终端窗口运行
+./Led_Humi 
+#在另一个终端窗口运行
+./mqtt_device 
 ```
 建议在 separate 终端中分别运行，或使用 & 放入后台。
 
