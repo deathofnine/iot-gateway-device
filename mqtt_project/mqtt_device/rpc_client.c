@@ -120,11 +120,10 @@ int RPC_Client_Init(void)
     int iRet;
 
     iSocketClient = socket(AF_INET, SOCK_STREAM, 0);
-
-    tSocketServerAddr.sin_family      = AF_INET;
-    tSocketServerAddr.sin_port        = htons(PORT);  /* host to net, short */
-    //tSocketServerAddr.sin_addr.s_addr = INADDR_ANY;
-    inet_aton("127.0.0.1", &tSocketServerAddr.sin_addr);
+    tSocketServerAddr.sin_family      = AF_INET;  //IPv4
+    tSocketServerAddr.sin_port        = htons(PORT);  //端口号
+    //tSocketServerAddr.sin_addr.s_addr = INADDR_ANY; 
+    inet_aton("127.0.0.1", &tSocketServerAddr.sin_addr); //服务器IP=本机 
     memset(tSocketServerAddr.sin_zero, 0, 8);
 
 

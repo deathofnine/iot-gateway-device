@@ -26,9 +26,6 @@
 #define QOS         1
 #define TIMEOUT     10000L
 
-#define USER_NAME "100ask"
-#define PASSWORD  "100ask"
-
 volatile MQTTClient_deliveryToken deliveredtoken;
 
 void delivered(void *context, MQTTClient_deliveryToken dt)
@@ -41,8 +38,8 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
 {
     int on;
     printf("Message arrived\n");
-    printf("     topic: %s\n", topicName);
-    printf("   message: %.*s\n", message->payloadlen, (char*)message->payload);
+    printf("topic: %s\n", topicName);
+    printf("message: %.*s\n", message->payloadlen, (char*)message->payload);
     cJSON *root=cJSON_Parse((char*)message->payload);
     cJSON *ptTemp=cJSON_GetObjectItem(root, "paras");
     if(ptTemp)
@@ -85,36 +82,27 @@ int main(int argc, char* argv[])
     int rc;
     /*读配置文件 /etc/*/
     char URI[1000];
-    char clientid[1000];
-    char username[1000];
-    char password[1000];
-    char ProductID[1000];
-    char DeviceName[1000];
+    char clientid[100];
+    char username[100];
+    char password[100];
+    char ProductID[100];
+    char DeviceName[100];
 
-    char address[1000];
-    char pub_topic[1000];//发布: $oc/devices/{deviceId}/sys/properties/report
-    char sub_topic[1000];//订阅: $oc/devices/{deviceId}/sys/commands/#
+    char address[100];
+    char pub_topic[100];//发布: $oc/devices/{deviceId}/sys/properties/report    //华为云主题上报格式要求
+    char sub_topic[100];//订阅: $oc/devices/{deviceId}/sys/commands/#           //华为云主题订阅格式要求
     if(0!=read_cfg(URI, clientid, username, password, ProductID, DeviceName))
     {
         printf("read cfg err\n");
         return -1;
     }
-    printf("Config loaded:\n");
-    printf("  URI: %s\n", URI);
-    printf("  clientid: %s\n", clientid);
-    printf("  username: %s\n", username);
-    printf("  password: %s\n", password);
-    printf("  ProductID: %s\n", ProductID);
-    printf("  DeviceName: %s\n", DeviceName);
 
-
-    /*init rpc: connect rpc server*/
-
+    //拼接服务器地址+主题
     sprintf(address, "tcp://%s:1883", URI);
     sprintf(pub_topic,"$oc/devices/%s/sys/properties/report",username);
     sprintf(sub_topic,"$oc/devices/%s/sys/commands/#",username);
-
     
+    //连接RPC服务器
     if(-1==RPC_Client_Init())
     {
         printf("RPC_Client_Init err\n");
@@ -123,18 +111,9 @@ int main(int argc, char* argv[])
     else
     {
         printf("RPC client initialized successfully\n");
-    }
+    } 
 
-    printf("\nMQTT connection parameters:\n");
-    printf("  Address: %s\n", address);
-    printf("  ClientID: %s\n", clientid);
-    printf("  Username: %s\n", username);
-    printf("  Password: %s\n", password);
-    printf("  KeepAliveInterval: %d\n", conn_opts.keepAliveInterval);
-    printf("  CleanSession: %d\n", conn_opts.cleansession);
-    printf("\nCreating MQTT client...\n");
-
-    
+    //创建MQTT客户端
     if ((rc = MQTTClient_create(&client,address , clientid,
         MQTTCLIENT_PERSISTENCE_NONE, NULL)) != MQTTCLIENT_SUCCESS)
     {
@@ -143,15 +122,19 @@ int main(int argc, char* argv[])
         goto exit;
     }
     printf("MQTT client created successfully\n");
+
+    //连接断开调用connlost，收到消息调用msgarrvd，服务器收到消息调用delivered
     if ((rc = MQTTClient_setCallbacks(client, NULL, connlost, msgarrvd, delivered)) != MQTTCLIENT_SUCCESS)
     {
         printf("Failed to set callbacks, return code %d\n", rc);
         rc = EXIT_FAILURE;
         goto destroy_exit;
     }
-    conn_opts.MQTTVersion = 4;
-    conn_opts.keepAliveInterval = 60;
-    conn_opts.cleansession = 1;
+
+    //定义服务器连接所需信息
+    conn_opts.MQTTVersion = 4;//注意，版本一定要选择3.1.1，其他平台不清楚，华为云平台的服务器不设置版本会连接失败
+    conn_opts.keepAliveInterval = 60;//心跳
+    conn_opts.cleansession = 1; //干净会话，简单、稳定、不占服务器资源。
     conn_opts.username = username;
     conn_opts.password = password;
     if ((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS)
@@ -182,7 +165,18 @@ int main(int argc, char* argv[])
             char humi;
             char temp;
             while(0!=rpc_dht11_read(&humi,&temp));
-
+            //华为云标准数据上报格式
+            //{
+            //     "services": [
+            //        {
+            //            "service_id": "DeviceData",
+            //            "properties": {
+            //            "temp_value": 25,
+            //            "humi_value": 60
+            //            }
+            //        }
+            //    ]
+            //}
             sprintf(buf, "{\"services\":[{\"service_id\":\"DeviceData\",\"properties\":{\"temp_value\":%d,\"humi_value\":%d}}]}", temp, humi);
             pubmsg.payload = buf;
             pubmsg.payloadlen = (int)strlen(buf);
@@ -194,7 +188,7 @@ int main(int argc, char* argv[])
                  printf("Failed to publish message, return code %d\n", rc);
                  continue;
             }
-            
+            //确认消息接受
             rc = MQTTClient_waitForCompletion(client, token, TIMEOUT);
             printf("Message with delivery token %d delivered\n", token);    
             sleep(5);                    
