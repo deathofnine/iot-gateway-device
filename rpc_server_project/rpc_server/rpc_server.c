@@ -23,6 +23,7 @@ cJSON * server_led_control(jrpc_context * ctx, cJSON * params, cJSON *id) {
     
     cJSON * status = cJSON_GetArrayItem(params,0);
     led_control(status->valueint);
+    //返回0表示执行成功
     return cJSON_CreateNumber(0);
 }
 
@@ -45,10 +46,10 @@ int RPC_Server_Init(void)
     {
         printf("jrpc_server_init err : %d\n", err);
     }
-    
+    //注册函数
     jrpc_register_procedure(&my_server, server_led_control, "led_control", NULL );
     jrpc_register_procedure(&my_server, server_dht11_read, "dht11_read", NULL );
-
+    //启动服务器，自动监听所有ip
     jrpc_server_run(&my_server);
     jrpc_server_destroy(&my_server);
 
@@ -58,13 +59,13 @@ int RPC_Server_Init(void)
 static void print_usage(char *exec)
 {
     printf("Usage:\n");
-    printf("%s <server>\n", exec);
-    printf("%s add <num1> <num2>\n", exec);
-    printf("%s hello <name>\n", exec);
+    printf("%s \n", exec);
+    printf("%s &\n", exec);
 }
 
 int main(int argc, char **argv)
 {
+    print_usage(argv[0]);
     led_init();
     mydht11_init();
     RPC_Server_Init();
