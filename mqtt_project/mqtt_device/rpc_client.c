@@ -20,6 +20,7 @@ int rpc_led_control(int on)
     int iLen;
     int ret=-1;
     int iSocketClient=g_iSocketClient;
+    //发送led控制申请
     sprintf(buf, "{\"method\": \"led_control\", \"params\": [%d], \"id\": \"2\" }", on);
     iLen = send(iSocketClient, buf, strlen(buf), 0);
     if (iLen ==  strlen(buf))
@@ -59,7 +60,7 @@ int rpc_dht11_read( char *humi,char *temp)
 {
     char buf[300];
     int iLen;
-
+    //发送读取数据申请
     sprintf(buf, "{\"method\": \"dht11_read\"," \
                    "\"params\":[0], \"id\": \"2\" }");
     int iSocketClient=g_iSocketClient;

@@ -27,13 +27,17 @@
 #define TIMEOUT     10000L
 
 volatile MQTTClient_deliveryToken deliveredtoken;
-
+// ------------------------------
+// MQTT 回调：消息发送完成
+// ------------------------------
 void delivered(void *context, MQTTClient_deliveryToken dt)
 {
     printf("Message with token value %d delivery confirmed\n", dt);
     deliveredtoken = dt;
 }
-
+// ------------------------------
+// MQTT 回调：云端下发指令（控制LED）
+// ------------------------------
 int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *message)
 {
     int on;
@@ -68,6 +72,9 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
     return 1;
 }
 
+// ------------------------------
+// MQTT 连接丢失
+// ------------------------------
 void connlost(void *context, char *cause)
 {
     printf("\nConnection lost\n");
@@ -106,6 +113,7 @@ int main(int argc, char* argv[])
     if(-1==RPC_Client_Init())
     {
         printf("RPC_Client_Init err\n");
+        
         return -1;
     }
     else
