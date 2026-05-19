@@ -16,8 +16,9 @@
 #include "dht11.h"
 static struct jrpc_server my_server;
 
-
-
+// ------------------------------
+// RPC 方法：LED控制
+// ------------------------------
 /*參數：{"prarams"：[0|1]}*/
 cJSON * server_led_control(jrpc_context * ctx, cJSON * params, cJSON *id) {
     
@@ -27,16 +28,28 @@ cJSON * server_led_control(jrpc_context * ctx, cJSON * params, cJSON *id) {
     return cJSON_CreateNumber(0);
 }
 
+// ------------------------------
+// RPC 方法：读取DHT11
+// ------------------------------
 /*參數：{"prarams"：null}*/
 cJSON * server_dht11_read(jrpc_context * ctx, cJSON * params, cJSON *id) {
     int array[2]={0};
      
     while(0!=mydht11_read((char *)&array[0],(char *)&array[1]));
+
+
+//-----------------------
+//返回形式为{ "result": [44,25] }
+// ---------------------
     return cJSON_CreateIntArray(array,2);
 }
 /* 连接RPC Server
  * 返回值: (>0)socket, (-1)失败
  */
+
+// ------------------------------
+// RPC 服务初始化
+// ------------------------------
 int RPC_Server_Init(void) 
 {
     int err;
